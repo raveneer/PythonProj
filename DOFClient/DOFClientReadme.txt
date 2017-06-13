@@ -1,61 +1,61 @@
-DOF Client ÀÚµ¿ ºôµå¸¦ À§ÇÑ °èÈ¹
+ï»¿DOF Client ìë™ ë¹Œë“œë¥¼ ìœ„í•œ ê³„íš
 
- 0. ºôµåÀü ÁÖÀÇ »çÇ×
- - ÀÚµ¿ ºôµå´Â python-3.6.1-amd64 +  pycharm-community-2017.1.3 È¯°æ¿¡¼­ Å×½ºÆ® µÇ¾úÀ½
- - ¸ğµç º¯°æ »çÇ×ÀÌ svn¿¡ commit µÇ¾î ÀÖ´ÂÁö È®ÀÎÇÑ´Ù.
- - ¹èÆ÷µÇ¾ß ÇÏ´Â ¸ğµâÀº ¹İµå½Ã ¹öÀü Á¤º¸°¡ ÀÌÀü ÀÎ½ºÅç·¯¿Í ´Ş¶ó¾ß ÇÑ´Ù.
- - ±âÁ¸¿¡ ¾ø´ø ¸ğµâ Ãß°¡½Ã svn¿¡ Ãß°¡ ÇØ¾ß Á¤»óÀûÀ¸·Î ÀÎ½ºÅç·¯¿¡ Æ÷ÇÔµÈ´Ù.
+ 0. ë¹Œë“œì „ ì£¼ì˜ ì‚¬í•­
+ - ìë™ ë¹Œë“œëŠ” python-3.6.1-amd64 +  pycharm-community-2017.1.3 í™˜ê²½ì—ì„œ í…ŒìŠ¤íŠ¸ ë˜ì—ˆìŒ
+ - ëª¨ë“  ë³€ê²½ ì‚¬í•­ì´ svnì— commit ë˜ì–´ ìˆëŠ”ì§€ í™•ì¸í•œë‹¤.
+ - ë°°í¬ë˜ì•¼ í•˜ëŠ” ëª¨ë“ˆì€ ë°˜ë“œì‹œ ë²„ì „ ì •ë³´ê°€ ì´ì „ ì¸ìŠ¤í†¨ëŸ¬ì™€ ë‹¬ë¼ì•¼ í•œë‹¤.
+ - ê¸°ì¡´ì— ì—†ë˜ ëª¨ë“ˆ ì¶”ê°€ì‹œ svnì— ì¶”ê°€ í•´ì•¼ ì •ìƒì ìœ¼ë¡œ ì¸ìŠ¤í†¨ëŸ¬ì— í¬í•¨ëœë‹¤.
  
  
- 1. svn Á¤¸®
-	1.1 "trunk\OpenManager_DOF", "trunk\OpenManager 5.0 Installer" Æú´õ¸¦ REVERT ÇÑ´Ù.
-	1.2 "trunk\OpenManager_DOF", "trunk\OpenManager 5.0 Installer" Æú´õ¸¦ UPDATE ÇÑ´Ù.
+ 1. svn ì •ë¦¬
+	1.1 "trunk\OpenManager_DOF", "trunk\OpenManager 5.0 Installer" í´ë”ë¥¼ REVERT í•œë‹¤.
+	1.2 "trunk\OpenManager_DOF", "trunk\OpenManager 5.0 Installer" í´ë”ë¥¼ UPDATE í•œë‹¤.
   
- 2. ÇÁ·ÎÁ§Æ® ÄÄÆÄÀÏ
-	2.1 ÇÁ·ÎÁ§Æ®¸¦ ¼ø¼­´ë·Î Rebuild All ÇÑ´Ù.
-		* VS2008¿¡¼­´Â Rebuile ¿É¼ÇÀÌ ÀÖ±â ¶§¹®¿¡ NGF¿Í ´Ù¸£°Ô Clean ´Ü°è°¡ ÇÊ¿ä ¾ø´Ù.
-	2.2 Common versionÀ» Release ¸ğµå·Î ÄÄÆÄÀÏ ÇÑ´Ù.
+ 2. í”„ë¡œì íŠ¸ ì»´íŒŒì¼
+	2.1 í”„ë¡œì íŠ¸ë¥¼ ìˆœì„œëŒ€ë¡œ Rebuild All í•œë‹¤.
+		* VS2008ì—ì„œëŠ” Rebuile ì˜µì…˜ì´ ìˆê¸° ë•Œë¬¸ì— NGFì™€ ë‹¤ë¥´ê²Œ Clean ë‹¨ê³„ê°€ í•„ìš” ì—†ë‹¤.
+	2.2 Common versionì„ Release ëª¨ë“œë¡œ ì»´íŒŒì¼ í•œë‹¤.
 		* trunk\OpenManager_DOF\OpenManager\Workspaces\MainFullVersion\MainFullVersion.sln
 		* trunk\OpenManager_DOF\OpenManager\Workspaces\ModulesCommon\ModulesCommon.sln
-	2.3 Anycatcher VersionÀ» Release_AnyCatcher ¸ğµå·Î ÄÄÆÄÀÏ ÇÑ´Ù.
+	2.3 Anycatcher Versionì„ Release_AnyCatcher ëª¨ë“œë¡œ ì»´íŒŒì¼ í•œë‹¤.
 		* trunk\OpenManager_DOF\OpenManager\Workspaces\MainFullVersion\AnyCatcher.sln
-	2.4 BTV VersionÀ» Release_BTV ¸ğµå·Î ÄÄÆÄÀÏ ÇÑ´Ù.
+	2.4 BTV Versionì„ Release_BTV ëª¨ë“œë¡œ ì»´íŒŒì¼ í•œë‹¤.
 		* trunk\OpenManager_DOF\OpenManager\Modules\Custom\BTV\BTV_full.sln
 	
- 3. ¸ğµâÀÇ º¹»ç 
-	3.1 ºôµå ¿Ï·áµÈ ¸ğµâµéÀ» ÀÌÀü ¸ğµâ°ú ¹öÀü Á¤º¸¸¦ ºñ±³ÇÏ¿© installer ÇÁ·ÎÁ§Æ®¿Í patch Æú´õ¿¡ º¹»çÇØÁØ´Ù.
-	3.2.1 ÀÏ¹İ ¹öÀü ÀÎ½ºÅç·¯ Ã³¸®
-		- trunk\OpenManager_DOF\OpenManager\Release\bin\*.exe | *.dll | *.ocx	-> trunk\OpenManager 5.0 Installer\SetupFile\Common\Bin\*.* º¹»çÇÑ´Ù.
-		- trunk\OpenManager_DOF\OpenManager\Release\modules\*.dll				-> trunk\OpenManager 5.0 Installer\SetupFile\Common\Modules\*.* º¹»çÇÑ´Ù.
-	3.2.2 ÀÏ¹İ¹öÀü Patch Ã³¸®
+ 3. ëª¨ë“ˆì˜ ë³µì‚¬ 
+	3.1 ë¹Œë“œ ì™„ë£Œëœ ëª¨ë“ˆë“¤ì„ ì´ì „ ëª¨ë“ˆê³¼ ë²„ì „ ì •ë³´ë¥¼ ë¹„êµí•˜ì—¬ installer í”„ë¡œì íŠ¸ì™€ patch í´ë”ì— ë³µì‚¬í•´ì¤€ë‹¤.
+	3.2.1 ì¼ë°˜ ë²„ì „ ì¸ìŠ¤í†¨ëŸ¬ ì²˜ë¦¬
+		- trunk\OpenManager_DOF\OpenManager\Release\bin\*.exe | *.dll | *.ocx	-> trunk\OpenManager 5.0 Installer\SetupFile\Common\Bin\*.* ë³µì‚¬í•œë‹¤.
+		- trunk\OpenManager_DOF\OpenManager\Release\modules\*.dll				-> trunk\OpenManager 5.0 Installer\SetupFile\Common\Modules\*.* ë³µì‚¬í•œë‹¤.
+	3.2.2 ì¼ë°˜ë²„ì „ Patch ì²˜ë¦¬
 		- trunk\OpenManager_DOF\OpenManager\Release\bin\*.exe | *.dll | *.ocx	-> D:\Upload\OpenManager5\release\autobuild\5.0.YYYYMMDD_HHMM\Patch\DOFClient\bin
 		- trunk\OpenManager_DOF\OpenManager\Release\modules\*.dll				-> D:\Upload\OpenManager5\release\autobuild\5.0.YYYYMMDD_HHMM\Patch\DOFClient\Modules
 	
-	3.3.1 Anycatcher ¹öÀü ÀÎ½ºÅç·¯ Ã³¸®
-		- trunk\OpenManager_DOF\OpenManager\ReleaseAnycatcher\bin\*.exe		-> trunk\OpenManager 5.0 Installer\CustomSetupFile\AnyCatcher\Common\Bin\*.* º¹»çÇÑ´Ù.
-		- trunk\OpenManager_DOF\OpenManager\ReleaseAnycatcher\modules\*.* 	-> trunk\OpenManager 5.0 Installer\CustomSetupFile\AnyCatcher\Common\Modules\*.* º¹»çÇÑ´Ù.
-	3.3.2 Anycatcher Patch Ã³¸®
+	3.3.1 Anycatcher ë²„ì „ ì¸ìŠ¤í†¨ëŸ¬ ì²˜ë¦¬
+		- trunk\OpenManager_DOF\OpenManager\ReleaseAnycatcher\bin\*.exe		-> trunk\OpenManager 5.0 Installer\CustomSetupFile\AnyCatcher\Common\Bin\*.* ë³µì‚¬í•œë‹¤.
+		- trunk\OpenManager_DOF\OpenManager\ReleaseAnycatcher\modules\*.* 	-> trunk\OpenManager 5.0 Installer\CustomSetupFile\AnyCatcher\Common\Modules\*.* ë³µì‚¬í•œë‹¤.
+	3.3.2 Anycatcher Patch ì²˜ë¦¬
 		- trunk\OpenManager_DOF\OpenManager\ReleaseAnycatcher\bin\*.exe		-> D:\Upload\OpenManager5\release\autobuild\5.0.YYYYMMDD_HHMM\Patch\AnycatcherClient\bin
 		- trunk\OpenManager_DOF\OpenManager\ReleaseAnycatcher\modules\*.*	-> D:\Upload\OpenManager5\release\autobuild\5.0.YYYYMMDD_HHMM\Patch\AnycatcherClient\modules
 		
-	3.4.1 BTV ¹öÀü ÀÎ½ºÅç·¯ Ã³¸®
-		- trunk\OpenManager_DOF\OpenManager\ReleaseBtv\modules\*.* -> trunk\OpenManager 5.0 Installer\CustomSetupFile\BTV\Common\Modules\*.* º¹»çÇÑ´Ù.
-	3.4.2 BTV Patch Ã³¸®
+	3.4.1 BTV ë²„ì „ ì¸ìŠ¤í†¨ëŸ¬ ì²˜ë¦¬
+		- trunk\OpenManager_DOF\OpenManager\ReleaseBtv\modules\*.* -> trunk\OpenManager 5.0 Installer\CustomSetupFile\BTV\Common\Modules\*.* ë³µì‚¬í•œë‹¤.
+	3.4.2 BTV Patch ì²˜ë¦¬
 		- trunk\OpenManager_DOF\OpenManager\ReleaseBtv\modules\*.* -> D:\Upload\OpenManager5\release\autobuild\5.0.YYYYMMDD_HHMM\Patch\btv\modules
 
-4. ÀÎ½ºÅç·¯ »ı¼º
-	4.1 ¾Æ·¡ÀÇ ISM ÆÄÀÏ¿¡¼­ <ProductVersion> node¸¦ Ã£¾Æ¼­ ¿À´Ã ³¯Â¥¸¦ ±âÁØÀ¸·Î ProductVersionÀ» º¯°æÇÑ´Ù.
+4. ì¸ìŠ¤í†¨ëŸ¬ ìƒì„±
+	4.1 ì•„ë˜ì˜ ISM íŒŒì¼ì—ì„œ <ProductVersion> nodeë¥¼ ì°¾ì•„ì„œ ì˜¤ëŠ˜ ë‚ ì§œë¥¼ ê¸°ì¤€ìœ¼ë¡œ ProductVersionì„ ë³€ê²½í•œë‹¤.
 		* "trunk\\OpenManager 5.0 Installer\\AnyCatcher.ism"
 		* "trunk\\OpenManager 5.0 Installer\\OpenManager 5.0_Lite.ism"		
-	4.2 trunk\autobuild\YYYYMMDD_HHMM\ Æú´õ¿¡ installer ÇÁ·ÎÁ§Æ®¸¦ export ÇÑ´Ù.
-	4.3 ÀÎ½ºÅç·¯ ÇÁ·ÎÁ§Æ®¸¦ ºôµå ÇÑ´Ù.
-	4.4 ºôµåµÈ ÀÎ½ºÅç·¯¸¦ ºôµå ³¯Â¥¿¡ ¸Â°Ô ÆÄÀÏ¸í º¯°æ ÈÄ Upload Æú´õ¿¡ º¹»çÇÑ´Ù.
+	4.2 trunk\autobuild\YYYYMMDD_HHMM\ í´ë”ì— installer í”„ë¡œì íŠ¸ë¥¼ export í•œë‹¤.
+	4.3 ì¸ìŠ¤í†¨ëŸ¬ í”„ë¡œì íŠ¸ë¥¼ ë¹Œë“œ í•œë‹¤.
+	4.4 ë¹Œë“œëœ ì¸ìŠ¤í†¨ëŸ¬ë¥¼ ë¹Œë“œ ë‚ ì§œì— ë§ê²Œ íŒŒì¼ëª… ë³€ê²½ í›„ Upload í´ë”ì— ë³µì‚¬í•œë‹¤.
 	
-5. FTP ¾÷·Îµå
-	6.1 Upload Æú´õ¿¡ º¹»çµÈ patch module(ÆÄÀÏ ¹öÀüÀÌ º¯°æµÇ¾î 4¹ø ´Ü°è¿¡¼­ º¹»çµÈ ¸ğµâ)°ú ÀÎ½ºÅç·¯¸¦ WinSCP¸¦ ÀÌ¿ëÇØ FTP·Î º¹»çÇÑ´Ù.
-		* OpenManager5/release/client/autobuild/5.0.YYYYMMDD_HHMM/ ¿¡ ¾÷·Îµå µÈ´Ù.
+5. FTP ì—…ë¡œë“œ
+	6.1 Upload í´ë”ì— ë³µì‚¬ëœ patch module(íŒŒì¼ ë²„ì „ì´ ë³€ê²½ë˜ì–´ 4ë²ˆ ë‹¨ê³„ì—ì„œ ë³µì‚¬ëœ ëª¨ë“ˆ)ê³¼ ì¸ìŠ¤í†¨ëŸ¬ë¥¼ WinSCPë¥¼ ì´ìš©í•´ FTPë¡œ ë³µì‚¬í•œë‹¤.
+		* OpenManager5/release/client/autobuild/5.0.YYYYMMDD_HHMM/ ì— ì—…ë¡œë“œ ëœë‹¤.
 	
-7. GIT À¸·Î ¹é¾÷
-    7.1 "D:\svn_backup\DOF" °æ·Î¿¡ svn fetch¸¦ ÀÌ¿ëÇÏ¿© GIT ¹é¾÷À» ÇÑ´Ù.
+7. GIT ìœ¼ë¡œ ë°±ì—…
+    7.1 "D:\svn_backup\DOF" ê²½ë¡œì— svn fetchë¥¼ ì´ìš©í•˜ì—¬ GIT ë°±ì—…ì„ í•œë‹¤.
 
- 8. ¾÷·Îµå ¿Ï·á ÈÄ Slack Ã¤³Î¿¡ ÀÛ¾÷ ¿Ï·á¸¦ ¾Ë·ÁÁØ´Ù.
+ 8. ì—…ë¡œë“œ ì™„ë£Œ í›„ Slack ì±„ë„ì— ì‘ì—… ì™„ë£Œë¥¼ ì•Œë ¤ì¤€ë‹¤.
