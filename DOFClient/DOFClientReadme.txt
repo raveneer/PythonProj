@@ -55,4 +55,7 @@ DOF Client 자동 빌드를 위한 계획
 	6.1 Upload 폴더에 복사된 patch module(파일 버전이 변경되어 4번 단계에서 복사된 모듈)과 인스톨러를 WinSCP를 이용해 FTP로 복사한다.
 		* OpenManager5/release/client/autobuild/5.0.YYYYMMDD_HHMM/ 에 업로드 된다.
 	
-6. 업로드 완료 후 Slack 채널에 작업 완료를 알려준다.
+7. GIT 으로 백업
+    7.1 "D:\svn_backup\DOF" 경로에 svn fetch를 이용하여 GIT 백업을 한다.
+
+ 8. 업로드 완료 후 Slack 채널에 작업 완료를 알려준다.
