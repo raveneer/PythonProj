@@ -22,3 +22,8 @@ class SVNClient(object):
     def svnCommit(self, commitLog):
         print("svn commit")
 
+    def svnExport(self, svnRepository, destDir):
+        print("svn export")
+        subprocess.call([self.svnclientpath, 'export', svnRepository, destDir, '--force'])
+
+

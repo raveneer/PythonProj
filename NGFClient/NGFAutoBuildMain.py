@@ -2,8 +2,9 @@
 from swkimLib import SVNClientWrapper
 from swkimLib import VSWrapper
 from swkimLib import BasicFunctions
+from swkimLib import InstallerWrapper
 import shutil
-import os
+import subprocess
 
 # 로컬에서 저장된 svn의 경로
 svnRepositoryList = ['D:\\NGF_FULL\\trunk\\OpenManager3.2x', 'D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer']
@@ -26,13 +27,11 @@ if __name__ == "__main__":
     print("NGF Client Auto Build Start")
 
     basicfunction = BasicFunctions()
+    curTime = basicfunction.getCurrentTime()
 
-    curTime = basicfunction.getCurrentTiem()
-    print (curTime)
-
-    
     #SVN 정리
     svnclient = SVNClientWrapper.SVNClient( svnRepositoryList )
+    '''
     svnclient.svnRevert();
     svnclient.svnUpdate();
     
@@ -73,15 +72,47 @@ if __name__ == "__main__":
     patchPath = 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\patch\\IOMC'.format(curTime)
 
     basicfunction.copyUpdateModules(targetPathList, releasePath, installerPath, patchPath)
-
+    '''
 
     #install shield porductversion update
+    ismList = []
+    ismList.append("D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer\\OpenManager 3.2.ism")
+    ismList.append("D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer\\CloudMesh_Lite.ism")
+    ismList.append("D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer\\OpenManager 3.2_IOMC.ism")
+    installshield = InstallerWrapper.Installer(ismList, '3.4')
+    installshield.versioninfoUpdate()
 
     #svn export
+    svnclient.svnExport('D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer', 'D:\\NGF_FULL\\trunk\\autobuild\\{0}'.format(curTime))
 
     #installer build
+    del ismList[:]
+    workdir = 'D:\\NGF_FULL\\trunk\\autobuild\\{0}'.format(curTime)
+    omc_arg = [workdir, 'OpenManager 3.2.ism', 'Release_AUTHORITY']
+    mesh_arg = [workdir, 'CloudMesh_Lite.ism', 'Release_Mesh_Authority']
+    iomc_arg = [workdir, 'OpenManager 3.2_IOMC.ism', 'IOMC_Auth']
 
-    #ftp upload
+    ismList.append(omc_arg)
+    ismList.append(mesh_arg)
+    ismList.append(iomc_arg)
+    installshield.buildISM(ismList)
+
+    shutil.copyfile('{0}\\ReleaseInstaller\\OMCAuthority_3.4.exe'.format(workdir), 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\OMCAuthority_3.4.{0}.exe'.format(curTime))
+    shutil.copyfile('{0}\\ReleaseInstaller\\CloudMeshAuthority_3.4.exe'.format(workdir), 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\CloudMeshAuthority_3.4.{0}.exe'.format(curTime))
+    shutil.copyfile('{0}\\ReleaseInstaller\\IOMC_3.4.exe'.format(workdir), 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\IOMC_3.4.{0}.exe'.format(curTime))
+
+    #win scp ftp upload
+    subprocess.call(['C:\\Program Files (x86)\\WinSCP\\WinSCP.exe'
+                     , '/command'
+                     , 'option batch abort'
+                     , 'option confirm off'
+                     , 'option transfer binary'
+                     , 'open ftp://ubicom:ubicom!23@220.76.205.150:10021/OpenManager3/release/client/autobuild'
+                     , 'put D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}'.format(curTime)
+                     , 'close'
+                     , 'exit'
+                     ])
+
 
     #git backup
 

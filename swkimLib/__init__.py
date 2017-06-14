@@ -41,7 +41,7 @@ class BasicFunctions(object):
         return  False
 
 
-    def getCurrentTiem(self):
+    def getCurrentTime(self):
         now = time.localtime()
         s = "%04d%02d%02d_%02d%02d" % (now.tm_year, now.tm_mon, now.tm_mday, now.tm_hour, now.tm_min)
         return  s
