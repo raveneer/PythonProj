@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     #SVN 정리
     svnclient = SVNClientWrapper.SVNClient( svnRepositoryList )
-    '''
+    
     svnclient.svnRevert();
     svnclient.svnUpdate();
     
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     patchPath = 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\patch\\IOMC'.format(curTime)
 
     basicfunction.copyUpdateModules(targetPathList, releasePath, installerPath, patchPath)
-    '''
+    
 
     #install shield porductversion update
     ismList = []

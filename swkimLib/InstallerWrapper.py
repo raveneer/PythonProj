@@ -36,7 +36,7 @@ class Installer(object):
 
     def buildISM(self, buildArgs):
         for argList in buildArgs:
-            subprocess.call([self.shieldPath, '-p', '{0}\\{1}'.format( argList[0], argList[1]), '-r', argList[2], '-c COMP -a', 'Media'])
+            subprocess.call([self.shieldPath, '-p', '{0}\\{1}'.format( argList[0], argList[1]), '-r', argList[2], '-c','COMP', '-a', 'Media'])
         return
 
     def buildISM(self, buildArgs):

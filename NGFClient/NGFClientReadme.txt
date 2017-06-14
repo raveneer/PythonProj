@@ -1,6 +1,8 @@
 ﻿NGF Client 자동 빌드를 위한 계획
 
  0. 빌드전 주의 사항
+ - "pip install pypiwin32" 명령어로 win32api를 설치해줘야 한다.
+ - "set PYTHONPATH=D:\GitHub\PythonProj"로 경로를 설정해줘야 swkimlib를 찾는다.
  - 자동 빌드는 python-3.6.1-amd64 +  pycharm-community-2017.1.3 환경에서 테스트 되었음
  - 모든 변경 사항이 svn에 commit 되어 있는지 확인한다.
  - 배포되야 하는 모듈은 반드시 버전 정보가 이전 인스톨러와 달라야 한다.
