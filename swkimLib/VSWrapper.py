@@ -27,13 +27,21 @@ class VisualStudio(object):
         if self.visualStudio == VisualStudionVerionEnum.VS6:
             keyList = paramList.keys()
             for key in keyList:
+                subprocess.call([self.compilePath, paramList[key], '/MAKE', key, '/CLEAN'])
+                '''
                 proc = subprocess.Popen([self.compilePath, paramList[key], '/MAKE', key,  '/CLEAN'], stdout=subprocess.PIPE)
-                proc.communicate()
+                out, err = proc.communicate()
+                print ( out )
+                '''
 
     def BuildProject(self, paramList={}):
         print("Visual Studio  Build")
         if self.visualStudio == VisualStudionVerionEnum.VS6:
             keyList = paramList.keys()
             for key in keyList:
+                subprocess.call( [self.compilePath, paramList[key], '/MAKE', key])
+                '''
                 proc = subprocess.Popen([self.compilePath, paramList[key], '/MAKE', key], stdout=subprocess.PIPE)
-                proc.communicate()
+                out, err = proc.communicate()
+                print(out)
+                '''
