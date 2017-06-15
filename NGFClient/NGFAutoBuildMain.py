@@ -140,7 +140,7 @@ if __name__ == "__main__":
                       ])
     #slack noti
     print ('Slack notify')
-    slack_client = SlackClient('xoxb-176677785552-BQVJvmO4SkbkwcZWBktSgu3z')
+    slack_client = SlackClient('')
     slack_client.api_call("chat.postMessage", channel='#Chappie', text='NGF Build 완료', as_user=True)
 
 
