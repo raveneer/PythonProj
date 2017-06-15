@@ -5,6 +5,8 @@ from swkimLib import BasicFunctions
 from swkimLib import InstallerWrapper
 import shutil
 import subprocess
+import os
+from slackclient import SlackClient
 
 # 로컬에서 저장된 svn의 경로
 svnRepositoryList = ['D:\\NGF_FULL\\trunk\\OpenManager3.2x', 'D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer']
@@ -29,8 +31,11 @@ if __name__ == "__main__":
     basicfunction = BasicFunctions()
     curTime = basicfunction.getCurrentTime()
 
+
+
     #SVN 정리
     svnclient = SVNClientWrapper.SVNClient( svnRepositoryList )
+
     
     svnclient.svnRevert();
     svnclient.svnUpdate();
@@ -75,6 +80,7 @@ if __name__ == "__main__":
     
 
     #install shield porductversion update
+
     ismList = []
     ismList.append("D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer\\OpenManager 3.2.ism")
     ismList.append("D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer\\CloudMesh_Lite.ism")
@@ -85,8 +91,11 @@ if __name__ == "__main__":
     #svn export
     svnclient.svnExport('D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer', 'D:\\NGF_FULL\\trunk\\autobuild\\{0}'.format(curTime))
 
+
+
     #installer build
     del ismList[:]
+
     workdir = 'D:\\NGF_FULL\\trunk\\autobuild\\{0}'.format(curTime)
     omc_arg = [workdir, 'OpenManager 3.2.ism', 'Release_AUTHORITY']
     mesh_arg = [workdir, 'CloudMesh_Lite.ism', 'Release_Mesh_Authority']
@@ -97,9 +106,15 @@ if __name__ == "__main__":
     ismList.append(iomc_arg)
     installshield.buildISM(ismList)
 
+
+    if not os.path.exists( 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}'.format(curTime) ):
+        os.makedirs( 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}'.format(curTime) )
+
     shutil.copyfile('{0}\\ReleaseInstaller\\OMCAuthority_3.4.exe'.format(workdir), 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\OMCAuthority_3.4.{0}.exe'.format(curTime))
     shutil.copyfile('{0}\\ReleaseInstaller\\CloudMeshAuthority_3.4.exe'.format(workdir), 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\CloudMeshAuthority_3.4.{0}.exe'.format(curTime))
     shutil.copyfile('{0}\\ReleaseInstaller\\IOMC_3.4.exe'.format(workdir), 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\IOMC_3.4.{0}.exe'.format(curTime))
+
+    print ( 'ftp upload start')
 
     #win scp ftp upload
     subprocess.call(['C:\\Program Files (x86)\\WinSCP\\WinSCP.exe'
@@ -112,11 +127,21 @@ if __name__ == "__main__":
                      , 'close'
                      , 'exit'
                      ])
+    print ('ftp upload END')
 
 
     #git backup
-
+    print ('GIT Backup')
+    subprocess.call([ "c:\\Program Files (x86)\\Git\\bin\\git.exe"
+                      , '-C'
+                      , "D:\\svn_backup\\NGF"
+                      , 'svn'
+                      , 'fetch'
+                      ])
     #slack noti
+    print ('Slack notify')
+    slack_client = SlackClient('xoxb-176677785552-BQVJvmO4SkbkwcZWBktSgu3z')
+    slack_client.api_call("chat.postMessage", channel='#Chappie', text='NGF Build 완료', as_user=True)
 
 
     #end Main
