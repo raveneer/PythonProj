@@ -2,6 +2,7 @@
 
 import subprocess
 import enum
+import logging
 
 class VisualStudionVerionEnum(enum.Enum):
     VS6 = 1
@@ -15,33 +16,35 @@ class VisualStudio(object):
     visualStudio = VisualStudionVerionEnum.VS6
     compilePath = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\Common\\MSDev98\\Bin\\msdev.exe'
 
-    def __init__(self, vsVersion):
-        print("Visual Studio  init")
+    def __init__(self, vsVersion, logdir):
+        self.mylogger = logging.getLogger('ngf_auto_build_logger')
+        self.buildlogdir = logdir
         if vsVersion == VisualStudionVerionEnum.VS2008:
             self.compilePath = 'C:\\WINDOWS\\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe'
             self.visualStudio = vsVersion
+            self.mylogger.info('Visual studio 2008')
+        else:
+            self.mylogger.info('Visual studio 6.0')
+
+
 
 
     def CleanProject(self, paramList = {}):
-        print("Visual Studio  Clean")
+
         if self.visualStudio == VisualStudionVerionEnum.VS6:
             keyList = paramList.keys()
             for key in keyList:
-                subprocess.call([self.compilePath, paramList[key], '/MAKE', key, '/CLEAN'])
-                '''
-                proc = subprocess.Popen([self.compilePath, paramList[key], '/MAKE', key,  '/CLEAN'], stdout=subprocess.PIPE)
-                out, err = proc.communicate()
-                print ( out )
-                '''
+                result = subprocess.run([self.compilePath, paramList[key], '/MAKE', key, '/CLEAN'], stdout=subprocess.PIPE)
+                self.mylogger.info('PROJECT CLEAN\n{0}'.format(result.stdout.decode('utf-8')))
+
 
     def BuildProject(self, paramList={}):
-        print("Visual Studio  Build")
+        stdlog = open('{0}\\build.log'.format(self.buildlogdir), 'a')
+        self.mylogger.info('PROJECT BUILD START')
         if self.visualStudio == VisualStudionVerionEnum.VS6:
             keyList = paramList.keys()
             for key in keyList:
-                subprocess.call( [self.compilePath, paramList[key], '/MAKE', key])
-                '''
-                proc = subprocess.Popen([self.compilePath, paramList[key], '/MAKE', key], stdout=subprocess.PIPE)
-                out, err = proc.communicate()
-                print(out)
-                '''
+                subprocess.run([self.compilePath, paramList[key], '/MAKE', key], stdout=stdlog)
+
+            stdlog.close()
+            self.mylogger.info('PROJECT BUILD END')

@@ -1,37 +1,68 @@
 #-*- coding: utf-8 -*-
-from swkimLib import SVNClientWrapper
-from swkimLib import VSWrapper
-from swkimLib import BasicFunctions
-from swkimLib import InstallerWrapper
+from Lib import SVNClientWrapper
+from Lib import VSWrapper
+from Lib import BasicFunctions
+from Lib import InstallerWrapper
+
+from slackclient import SlackClient
+
 import shutil
 import subprocess
 import os
-from slackclient import SlackClient
+import logging
+import logging.handlers
+
+basicfunction = BasicFunctions.BasicFunctions()
+curTime = basicfunction.getCurrentTime()
+
+#로그를 남길 폴더를 만들고, 스트림 핸들러와 파일 핸들러를 붙여준다.
+logdir = '{0}\\log\\{1}'.format(os.getcwd(), curTime)
+
+if not os.path.exists(logdir):
+    os.makedirs(logdir)
+
+logger          = logging.getLogger('ngf_auto_build_logger')
+fileHandler     = logging.FileHandler('{0}/autobuild_{1}.log'.format(logdir, curTime))
+streamHandler   = logging.StreamHandler()
+
+logger.addHandler(fileHandler)
+logger.addHandler(streamHandler)
+logger.setLevel(logging.DEBUG)
+
+#trunk와 autobuild 경로는 변경 될 수 있으니 이건 config 파일에서 읽어도 됨
+ngf_proj_trunk      = 'D:\\NGF_FULL\\trunk'
+ngf_autobuild       = 'D:\\Upload\\OpenManager3\\release\\autobuild'
+
+#trunk에서 시작하는 경로는 변경 될 수 없다.
+ngf_installer_root      = '{0}\\OpenManager 3.2 Installer'.format(ngf_proj_trunk)
+ngf_source_root         = '{0}\\OpenManager3.2x'.format(ngf_proj_trunk)
+ngf_workspaces_path     = '{0}\\OpenManager\\Workspaces'.format(ngf_source_root)
+ngf_release_root        = '{0}\\OpenManager\\Release'.format(ngf_source_root)
 
 # 로컬에서 저장된 svn의 경로
-svnRepositoryList = ['D:\\NGF_FULL\\trunk\\OpenManager3.2x', 'D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer']
+svnRepositoryList = [ngf_source_root, ngf_installer_root]
 
 #vs6환경에서 clean하기 위한 프로젝트 파일명과 빌드 옵션을 map으로 만들어 준다.
-OMCBuildProject = { 'OpenManager - Win32 R_Auth':'D:\\NGF_FULL\\trunk\\OpenManager3.2x\\OpenManager\\Workspaces\\MainFullVersion\\MainFullVersion.dsw'
-                    , 'About - Win32 Release':'D:\\NGF_FULL\\trunk\\OpenManager3.2x\\OpenManager\\Workspaces\\ModulesCommon\\ModulesCommon.dsw'
-                    , 'OMUpdater - Win32 Release':'D:\\NGF_FULL\\trunk\\OpenManager3.2x\\OpenManager\\Workspaces\\Updater\\OMUpdater.dsw'}
+OMCBuildProject = { 'OpenManager - Win32 R_Auth':'{0}\\MainFullVersion\\MainFullVersion.dsw'.format(ngf_workspaces_path)
+                    , 'About - Win32 Release':'{0}\\ModulesCommon\\ModulesCommon.dsw'.format(ngf_workspaces_path)
+                    , 'OMUpdater - Win32 Release':'{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path)}
 
-MeshBuildProject = {'OpenManager - Win32 R_Auth_Mesh':'D:\\NGF_FULL\\trunk\\OpenManager3.2x\\OpenManager\\Workspaces\\MainFullVersion\\MainFullVersion.dsw'
-                    , 'OMUpdater - Win32 Release':'D:\\NGF_FULL\\trunk\\OpenManager3.2x\\OpenManager\\Workspaces\\Updater\\MeshUpdater.dsw'}
+MeshBuildProject = {'OpenManager - Win32 R_Auth_Mesh':'{0}\\MainFullVersion\\MainFullVersion.dsw'.format(ngf_workspaces_path)
+                    , 'OMUpdater - Win32 Release':'{0}\\Updater\\MeshUpdater.dsw'.format(ngf_workspaces_path)}
 
-IOMCBuildProject = {'OMUpdater - Win32 Release_IOMC':'D:\\NGF_FULL\\trunk\\OpenManager3.2x\\OpenManager\\Workspaces\\Updater\\OMUpdater.dsw'}
+IOMCBuildProject = {'OMUpdater - Win32 Release_IOMC':'{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path)}
 
 
 #icon 복사 root
-resRoot = 'D:\\NGF_FULL\\trunk\\OpenManager3.2x\\OpenManager\\MainApplication\\FullVersion\\res'
+resRoot = '{0}\\OpenManager\\MainApplication\\FullVersion\\res'.format(ngf_source_root)
 
 if __name__ == "__main__":
-    print("NGF Client Auto Build Start")
+    logger.info('=======================================')
+    logger.info('NGF Client AutoBuild Start')
+    logger.info('=======================================')
 
-    basicfunction = BasicFunctions()
+    basicfunction = BasicFunctions.BasicFunctions()
     curTime = basicfunction.getCurrentTime()
-
-
 
     #SVN 정리
     svnclient = SVNClientWrapper.SVNClient( svnRepositoryList )
@@ -41,7 +72,7 @@ if __name__ == "__main__":
     svnclient.svnUpdate();
     
     #vs6 project clean
-    vsclient = VSWrapper.VisualStudio(VSWrapper.VisualStudionVerionEnum.VS6)
+    vsclient = VSWrapper.VisualStudio(VSWrapper.VisualStudionVerionEnum.VS6, logdir)
     vsclient.CleanProject(OMCBuildProject)
     vsclient.CleanProject(MeshBuildProject)
     vsclient.CleanProject(IOMCBuildProject)
@@ -53,11 +84,11 @@ if __name__ == "__main__":
     vsclient.BuildProject(OMCBuildProject)
 
     targetPathList  = ['bin', 'modules']
-    releasePath     = 'D:\\NGF_FULL\\trunk\\OpenManager3.2x\\OpenManager\\Release'
-    installerPath   = 'D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer\\SetupFile\\Common'
-    patchPath       = 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\patch\\NGFClient.Auth'.format(curTime)
 
-    basicfunction.copyUpdateModules(targetPathList, releasePath, installerPath, patchPath)
+    installerPath   = '{0}\\SetupFile\\Common'.format(ngf_installer_root)
+    patchPath       = '{0}\\3.4.{1}\\patch\\NGFClient.Auth'.format(ngf_autobuild, curTime)
+
+    basicfunction.copyUpdateModules(targetPathList, ngf_release_root, installerPath, patchPath)
 
     ####################################################
     #########  MESH 처리하기
@@ -65,38 +96,38 @@ if __name__ == "__main__":
     shutil.copyfile('{0}\\mesh_NGF.ico'.format(resRoot), '{0}\\NGF.ico'.format(resRoot))
     vsclient.BuildProject(MeshBuildProject)
 
-    installerPath = 'D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer\\CustomSetupFile\\MESH'
-    patchPath = 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\patch\\MESH'.format(curTime)
+    installerPath = '{0}\\CustomSetupFile\\MESH'.format(ngf_installer_root)
+    patchPath = '{0}\\3.4.{1}\\patch\\MESH'.format(ngf_autobuild, curTime)
 
-    basicfunction.copyUpdateModules(targetPathList, releasePath, installerPath, patchPath)
+    basicfunction.copyUpdateModules(targetPathList, ngf_release_root, installerPath, patchPath)
 
     ####################################################
-    #########  MESH 처리하기
+    #########  IOMC 처리하기
     vsclient.BuildProject(IOMCBuildProject)
-    installerPath = 'D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer\\CustomSetupFile\\IOMC\\common'
-    patchPath = 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\patch\\IOMC'.format(curTime)
+    installerPath = '{0}\\CustomSetupFile\\IOMC\\common'.format(ngf_installer_root)
+    patchPath = '{0}\\3.4.{1}\\patch\\IOMC'.format(ngf_autobuild, curTime)
 
-    basicfunction.copyUpdateModules(targetPathList, releasePath, installerPath, patchPath)
+    basicfunction.copyUpdateModules(targetPathList, ngf_release_root, installerPath, patchPath)
     
 
     #install shield porductversion update
 
     ismList = []
-    ismList.append("D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer\\OpenManager 3.2.ism")
-    ismList.append("D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer\\CloudMesh_Lite.ism")
-    ismList.append("D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer\\OpenManager 3.2_IOMC.ism")
+    ismList.append("{0}\\OpenManager 3.2.ism".format(ngf_installer_root))
+    ismList.append("{0}\\CloudMesh_Lite.ism".format(ngf_installer_root))
+    ismList.append("{0}\\OpenManager 3.2_IOMC.ism".format(ngf_installer_root))
     installshield = InstallerWrapper.Installer(ismList, '3.4')
     installshield.versioninfoUpdate()
 
     #svn export
-    svnclient.svnExport('D:\\NGF_FULL\\trunk\\OpenManager 3.2 Installer', 'D:\\NGF_FULL\\trunk\\autobuild\\{0}'.format(curTime))
+    svnclient.svnExport(ngf_installer_root, '{0}\\autobuild\\{1}'.format(ngf_proj_trunk, curTime))
 
 
 
     #installer build
     del ismList[:]
 
-    workdir = 'D:\\NGF_FULL\\trunk\\autobuild\\{0}'.format(curTime)
+    workdir = '{0}\\autobuild\\{1}'.format(ngf_proj_trunk, curTime)
     omc_arg = [workdir, 'OpenManager 3.2.ism', 'Release_AUTHORITY']
     mesh_arg = [workdir, 'CloudMesh_Lite.ism', 'Release_Mesh_Authority']
     iomc_arg = [workdir, 'OpenManager 3.2_IOMC.ism', 'IOMC_Auth']
@@ -107,12 +138,12 @@ if __name__ == "__main__":
     installshield.buildISM(ismList)
 
 
-    if not os.path.exists( 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}'.format(curTime) ):
-        os.makedirs( 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}'.format(curTime) )
+    if not os.path.exists( '{0}\\3.4.{0}'.format(ngf_autobuild, curTime) ):
+        os.makedirs( '{0}\\3.4.{1}'.format(ngf_autobuild, curTime) )
 
-    shutil.copyfile('{0}\\ReleaseInstaller\\OMCAuthority_3.4.exe'.format(workdir), 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\OMCAuthority_3.4.{0}.exe'.format(curTime))
-    shutil.copyfile('{0}\\ReleaseInstaller\\CloudMeshAuthority_3.4.exe'.format(workdir), 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\CloudMeshAuthority_3.4.{0}.exe'.format(curTime))
-    shutil.copyfile('{0}\\ReleaseInstaller\\IOMC_3.4.exe'.format(workdir), 'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}\\IOMC_3.4.{0}.exe'.format(curTime))
+    shutil.copyfile('{0}\\ReleaseInstaller\\OMCAuthority_3.4.exe'.format(workdir), '{0}\\3.4.{1}\\OMCAuthority_3.4.{1}.exe'.format(ngf_autobuild, curTime))
+    shutil.copyfile('{0}\\ReleaseInstaller\\CloudMeshAuthority_3.4.exe'.format(workdir), '{0}\\3.4.{1}\\CloudMeshAuthority_3.4.{1}.exe'.format(ngf_autobuild, curTime))
+    shutil.copyfile('{0}\\ReleaseInstaller\\IOMC_3.4.exe'.format(workdir), '{0}\\3.4.{1}\\IOMC_3.4.{1}.exe'.format(ngf_autobuild, curTime))
 
     print ( 'ftp upload start')
 
@@ -123,7 +154,7 @@ if __name__ == "__main__":
                      , 'option confirm off'
                      , 'option transfer binary'
                      , 'open ftp://ubicom:ubicom!23@220.76.205.150:10021/OpenManager3/release/client/autobuild'
-                     , 'put D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}'.format(curTime)
+                     , 'put {0}\\3.4.{1}'.format(ngf_autobuild, curTime)
                      , 'close'
                      , 'exit'
                      ])

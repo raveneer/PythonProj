@@ -3,7 +3,6 @@
 import os
 import time
 import shutil
-#pip install pypiwin32
 from win32api import GetFileVersionInfo, LOWORD, HIWORD
 
 class BasicFunctions(object):
