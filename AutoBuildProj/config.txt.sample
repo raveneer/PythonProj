@@ -1,0 +1,13 @@
+[NGF]
+proj_root = D:\NGF_FULL\trunk
+autobuild = D:\Upload\OpenManager3\release\autobuild
+ftp_upload = 127.0.0.1/OpenManager3/release/client/autobuild
+
+[DOF]
+proj_root = D:\DOF_FULL\trunk
+autobuild = D:\Upload\OpenManager5\release\autobuild
+ftp_upload = 127.0.0.1/OpenManager5/release/client/autobuild
+
+[slack]
+bot_token = xoxb-zzzzz
+channel = #channelname

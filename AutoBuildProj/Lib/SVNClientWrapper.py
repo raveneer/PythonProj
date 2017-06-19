@@ -28,8 +28,6 @@ class SVNClient(object):
         print("svn commit")
 
     def svnExport(self, svnRepository, destDir):
-        result = subprocess.run([self.svnclientpath, 'cleanup', repository], stdout=subprocess.PIPE)
-        self.mylogger.info('SVN Cleanup - {0}'.format(result.stdout.decode('utf-8')))
         subprocess.call([self.svnclientpath, 'export', svnRepository, destDir, '--force'])
         self.mylogger.info('SVN EXPORT - [{0}] to [{1}]'.format(svnRepository, destDir))
 
