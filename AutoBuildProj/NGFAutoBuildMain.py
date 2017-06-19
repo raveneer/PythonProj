@@ -35,15 +35,17 @@ config = configparser.ConfigParser()
 
 if os.path.exists('.\config.txt'):
     config.read('.\config.txt')
-    config.set('NGF', 'ngf_autobuild', '{0}\\3.4.{1}'.format(config.get('NGF', 'ngf_autobuild'), curTime))
+    config.set('NGF', 'autobuild', '{0}\\3.4.{1}'.format(config.get('NGF', 'autobuild'), curTime))
 else :
     config.add_section('NGF')
-    config.set('NGF', 'ngf_proj_root',  'D:\\NGF_FULL\\trunk')
-    config.set('NGF', 'ngf_autobuild',  'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}'.format(curTime))
+    config.set('NGF', 'proj_root',  'D:\\NGF_FULL\\trunk')
+    config.set('NGF', 'autobuild',  'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}'.format(curTime))
     config.set('NGF', 'ftp_upload',     '220.76.205.150:10021/OpenManager3/release/client/autobuild')
+    config.add_section('slack')
+    config.set('slack', 'channel', '#Chappie')
 
-ngf_proj_trunk      = config.get('NGF', 'ngf_proj_root')
-ngf_autobuild       = config.get('NGF', 'ngf_autobuild')
+ngf_proj_trunk      = config.get('NGF', 'proj_root')
+ngf_autobuild       = config.get('NGF', 'autobuild')
 ftp_upload          = config.get('NGF', 'ftp_upload')
 
 #trunk에서 시작하는 경로는 변경 될 수 없다.
@@ -185,8 +187,8 @@ if __name__ == "__main__":
                       ])
     #slack noti
     logger.info('Slack notify')
-    slack_client = SlackClient(config.get('NGF', 'bot_token'))
-    slack_client.api_call("chat.postMessage", channel='#Chappie', text='NGF Build 완료', as_user=True)
+    slack_client = SlackClient(config.get('slack', 'bot_token'))
+    slack_client.api_call("chat.postMessage", channel=config.get('slack', 'channel'), text='NGF Build 완료', as_user=True)
 
 
     #end Main
