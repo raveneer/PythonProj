@@ -11,6 +11,7 @@ import subprocess
 import os
 import logging
 import logging.handlers
+import configparser
 
 basicfunction = BasicFunctions.BasicFunctions()
 curTime = basicfunction.getCurrentTime()
@@ -29,9 +30,21 @@ logger.addHandler(fileHandler)
 logger.addHandler(streamHandler)
 logger.setLevel(logging.DEBUG)
 
-#trunk와 autobuild 경로는 변경 될 수 있으니 이건 config 파일에서 읽어도 됨
-ngf_proj_trunk      = 'D:\\NGF_FULL\\trunk'
-ngf_autobuild       = 'D:\\Upload\\OpenManager3\\release\\autobuild'
+#같은 경로에 있는 config.txt 파일을 읽어서 기본 root의 정보를 얻는다.
+config = configparser.ConfigParser()
+
+if os.path.exists('.\config.txt'):
+    config.read('.\config.txt')
+    config.set('NGF', 'ngf_autobuild', '{0}\\3.4.{1}'.format(config.get('NGF', 'ngf_autobuild'), curTime))
+else :
+    config.add_section('NGF')
+    config.set('NGF', 'ngf_proj_root',  'D:\\NGF_FULL\\trunk')
+    config.set('NGF', 'ngf_autobuild',  'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}'.format(curTime))
+    config.set('NGF', 'ftp_upload',     '220.76.205.150:10021/OpenManager3/release/client/autobuild')
+
+ngf_proj_trunk      = config.get('NGF', 'ngf_proj_root')
+ngf_autobuild       = config.get('NGF', 'ngf_autobuild')
+ftp_upload          = config.get('NGF', 'ftp_upload')
 
 #trunk에서 시작하는 경로는 변경 될 수 없다.
 ngf_installer_root      = '{0}\\OpenManager 3.2 Installer'.format(ngf_proj_trunk)
@@ -61,6 +74,7 @@ if __name__ == "__main__":
     logger.info('NGF Client AutoBuild Start')
     logger.info('=======================================')
 
+
     basicfunction = BasicFunctions.BasicFunctions()
     curTime = basicfunction.getCurrentTime()
 
@@ -86,7 +100,7 @@ if __name__ == "__main__":
     targetPathList  = ['bin', 'modules']
 
     installerPath   = '{0}\\SetupFile\\Common'.format(ngf_installer_root)
-    patchPath       = '{0}\\3.4.{1}\\patch\\NGFClient.Auth'.format(ngf_autobuild, curTime)
+    patchPath       = '{0}\\patch\\NGFClient.Auth'.format(ngf_autobuild)
 
     basicfunction.copyUpdateModules(targetPathList, ngf_release_root, installerPath, patchPath)
 
@@ -97,7 +111,7 @@ if __name__ == "__main__":
     vsclient.BuildProject(MeshBuildProject)
 
     installerPath = '{0}\\CustomSetupFile\\MESH'.format(ngf_installer_root)
-    patchPath = '{0}\\3.4.{1}\\patch\\MESH'.format(ngf_autobuild, curTime)
+    patchPath = '{0}\\patch\\MESH'.format(ngf_autobuild)
 
     basicfunction.copyUpdateModules(targetPathList, ngf_release_root, installerPath, patchPath)
 
@@ -105,7 +119,7 @@ if __name__ == "__main__":
     #########  IOMC 처리하기
     vsclient.BuildProject(IOMCBuildProject)
     installerPath = '{0}\\CustomSetupFile\\IOMC\\common'.format(ngf_installer_root)
-    patchPath = '{0}\\3.4.{1}\\patch\\IOMC'.format(ngf_autobuild, curTime)
+    patchPath = '{0}\\patch\\IOMC'.format(ngf_autobuild)
 
     basicfunction.copyUpdateModules(targetPathList, ngf_release_root, installerPath, patchPath)
     
@@ -138,14 +152,14 @@ if __name__ == "__main__":
     installshield.buildISM(ismList)
 
 
-    if not os.path.exists( '{0}\\3.4.{0}'.format(ngf_autobuild, curTime) ):
-        os.makedirs( '{0}\\3.4.{1}'.format(ngf_autobuild, curTime) )
+    if not os.path.exists( ngf_autobuild ):
+        os.makedirs( ngf_autobuild )
 
-    shutil.copyfile('{0}\\ReleaseInstaller\\OMCAuthority_3.4.exe'.format(workdir), '{0}\\3.4.{1}\\OMCAuthority_3.4.{1}.exe'.format(ngf_autobuild, curTime))
-    shutil.copyfile('{0}\\ReleaseInstaller\\CloudMeshAuthority_3.4.exe'.format(workdir), '{0}\\3.4.{1}\\CloudMeshAuthority_3.4.{1}.exe'.format(ngf_autobuild, curTime))
-    shutil.copyfile('{0}\\ReleaseInstaller\\IOMC_3.4.exe'.format(workdir), '{0}\\3.4.{1}\\IOMC_3.4.{1}.exe'.format(ngf_autobuild, curTime))
+    shutil.copyfile('{0}\\ReleaseInstaller\\OMCAuthority_3.4.exe'.format(workdir), '{0}\\OMCAuthority_3.4.{1}.exe'.format(ngf_autobuild, curTime))
+    shutil.copyfile('{0}\\ReleaseInstaller\\CloudMeshAuthority_3.4.exe'.format(workdir), '{0}\\CloudMeshAuthority_3.4.{1}.exe'.format(ngf_autobuild, curTime))
+    shutil.copyfile('{0}\\ReleaseInstaller\\IOMC_3.4.exe'.format(workdir), '{0}\\IOMC_3.4.{1}.exe'.format(ngf_autobuild, curTime))
 
-    print ( 'ftp upload start')
+    logger.info('ftp upload start')
 
     #win scp ftp upload
     subprocess.call(['C:\\Program Files (x86)\\WinSCP\\WinSCP.exe'
@@ -153,16 +167,16 @@ if __name__ == "__main__":
                      , 'option batch abort'
                      , 'option confirm off'
                      , 'option transfer binary'
-                     , 'open ftp://ubicom:ubicom!23@220.76.205.150:10021/OpenManager3/release/client/autobuild'
-                     , 'put {0}\\3.4.{1}'.format(ngf_autobuild, curTime)
+                     , 'open ftp://ubicom:ubicom!23@{0}'.format(ftp_upload)
+                     , 'put {0}'.format(ngf_autobuild)
                      , 'close'
                      , 'exit'
                      ])
-    print ('ftp upload END')
+    logger.info('ftp upload END')
 
 
     #git backup
-    print ('GIT Backup')
+    logger.info ('GIT Backup')
     subprocess.call([ "c:\\Program Files (x86)\\Git\\bin\\git.exe"
                       , '-C'
                       , "D:\\svn_backup\\NGF"
@@ -170,10 +184,10 @@ if __name__ == "__main__":
                       , 'fetch'
                       ])
     #slack noti
-    print ('Slack notify')
-    slack_client = SlackClient('')
+    logger.info('Slack notify')
+    slack_client = SlackClient(config.get('NGF', 'bot_token'))
     slack_client.api_call("chat.postMessage", channel='#Chappie', text='NGF Build 완료', as_user=True)
 
 
     #end Main
-    print("NGF Client Auto Build END")
+    logger.info("NGF Client Auto Build END")
