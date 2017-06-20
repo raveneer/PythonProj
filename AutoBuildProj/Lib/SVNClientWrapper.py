@@ -8,7 +8,7 @@ class SVNClient(object):
     def __init__(self, repositoryList):
         self.svnclientpath = 'svn'
         self.repositoryList = repositoryList[:]
-        self.mylogger = logging.getLogger('ngf_auto_build_logger')
+        self.mylogger = logging.getLogger('auto_build_logger')
 
     def svnUpdate(self):
         for repository in self.repositoryList:

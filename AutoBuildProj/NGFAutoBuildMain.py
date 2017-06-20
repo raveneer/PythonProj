@@ -22,7 +22,7 @@ logdir = '{0}\\log\\{1}'.format(os.getcwd(), curTime)
 if not os.path.exists(logdir):
     os.makedirs(logdir)
 
-logger          = logging.getLogger('ngf_auto_build_logger')
+logger          = logging.getLogger('auto_build_logger')
 fileHandler     = logging.FileHandler('{0}/autobuild_{1}.log'.format(logdir, curTime))
 streamHandler   = logging.StreamHandler()
 
@@ -30,51 +30,45 @@ logger.addHandler(fileHandler)
 logger.addHandler(streamHandler)
 logger.setLevel(logging.DEBUG)
 
-#같은 경로에 있는 config.txt 파일을 읽어서 기본 root의 정보를 얻는다.
-config = configparser.ConfigParser()
-
-if os.path.exists('.\config.txt'):
-    config.read('.\config.txt')
-    config.set('NGF', 'autobuild', '{0}\\3.4.{1}'.format(config.get('NGF', 'autobuild'), curTime))
-else :
-    config.add_section('NGF')
-    config.set('NGF', 'proj_root',  'D:\\NGF_FULL\\trunk')
-    config.set('NGF', 'autobuild',  'D:\\Upload\\OpenManager3\\release\\autobuild\\3.4.{0}'.format(curTime))
-    config.set('NGF', 'ftp_upload',     '220.76.205.150:10021/OpenManager3/release/client/autobuild')
-    config.add_section('slack')
-    config.set('slack', 'channel', '#Chappie')
-
-ngf_proj_trunk      = config.get('NGF', 'proj_root')
-ngf_autobuild       = config.get('NGF', 'autobuild')
-ftp_upload          = config.get('NGF', 'ftp_upload')
-
-#trunk에서 시작하는 경로는 변경 될 수 없다.
-ngf_installer_root      = '{0}\\OpenManager 3.2 Installer'.format(ngf_proj_trunk)
-ngf_source_root         = '{0}\\OpenManager3.2x'.format(ngf_proj_trunk)
-ngf_workspaces_path     = '{0}\\OpenManager\\Workspaces'.format(ngf_source_root)
-ngf_release_root        = '{0}\\OpenManager\\Release'.format(ngf_source_root)
-
-# 로컬에서 저장된 svn의 경로
-svnRepositoryList = [ngf_source_root, ngf_installer_root]
-
-#vs6환경에서 clean하기 위한 프로젝트 파일명과 빌드 옵션을 map으로 만들어 준다.
-OMCBuildProject = { 'OpenManager - Win32 R_Auth':'{0}\\MainFullVersion\\MainFullVersion.dsw'.format(ngf_workspaces_path)
-                    , 'About - Win32 Release':'{0}\\ModulesCommon\\ModulesCommon.dsw'.format(ngf_workspaces_path)
-                    , 'OMUpdater - Win32 Release':'{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path)}
-
-MeshBuildProject = {'OpenManager - Win32 R_Auth_Mesh':'{0}\\MainFullVersion\\MainFullVersion.dsw'.format(ngf_workspaces_path)
-                    , 'OMUpdater - Win32 Release':'{0}\\Updater\\MeshUpdater.dsw'.format(ngf_workspaces_path)}
-
-IOMCBuildProject = {'OMUpdater - Win32 Release_IOMC':'{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path)}
-
-
-#icon 복사 root
-resRoot = '{0}\\OpenManager\\MainApplication\\FullVersion\\res'.format(ngf_source_root)
-
 if __name__ == "__main__":
     logger.info('=======================================')
     logger.info('NGF Client AutoBuild Start')
     logger.info('=======================================')
+
+    # 같은 경로에 있는 config.txt 파일을 읽어서 기본 root의 정보를 얻는다.
+    config = configparser.ConfigParser()
+
+    if os.path.exists('.\config.txt'):
+        config.read('.\config.txt')
+        config.set('NGF', 'autobuild', '{0}\\3.4.{1}'.format(config.get('NGF', 'autobuild'), curTime))
+
+    ngf_proj_trunk = config.get('NGF', 'proj_root')
+    ngf_autobuild = config.get('NGF', 'autobuild')
+    ftp_upload = config.get('NGF', 'ftp_upload')
+
+    # trunk에서 시작하는 경로는 변경 될 수 없다.
+    ngf_installer_root = '{0}\\OpenManager 3.2 Installer'.format(ngf_proj_trunk)
+    ngf_source_root = '{0}\\OpenManager3.2x'.format(ngf_proj_trunk)
+    ngf_workspaces_path = '{0}\\OpenManager\\Workspaces'.format(ngf_source_root)
+    ngf_release_root = '{0}\\OpenManager\\Release'.format(ngf_source_root)
+
+    # 로컬에서 저장된 svn의 경로
+    svnRepositoryList = [ngf_source_root, ngf_installer_root]
+
+    # vs6환경에서 clean하기 위한 프로젝트 파일명과 빌드 옵션을 map으로 만들어 준다.
+    OMCBuildProject = {
+        'OpenManager - Win32 R_Auth': '{0}\\MainFullVersion\\MainFullVersion.dsw'.format(ngf_workspaces_path)
+        , 'About - Win32 Release': '{0}\\ModulesCommon\\ModulesCommon.dsw'.format(ngf_workspaces_path)
+        , 'OMUpdater - Win32 Release': '{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path)}
+
+    MeshBuildProject = {
+        'OpenManager - Win32 R_Auth_Mesh': '{0}\\MainFullVersion\\MainFullVersion.dsw'.format(ngf_workspaces_path)
+        , 'OMUpdater - Win32 Release': '{0}\\Updater\\MeshUpdater.dsw'.format(ngf_workspaces_path)}
+
+    IOMCBuildProject = {'OMUpdater - Win32 Release_IOMC': '{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path)}
+
+    # icon 복사 root
+    resRoot = '{0}\\OpenManager\\MainApplication\\FullVersion\\res'.format(ngf_source_root)
 
 
     basicfunction = BasicFunctions.BasicFunctions()
@@ -88,7 +82,7 @@ if __name__ == "__main__":
     svnclient.svnUpdate();
     
     #vs6 project clean
-    vsclient = VSWrapper.VisualStudio(VSWrapper.VisualStudionVerionEnum.VS6, logdir)
+    vsclient = VSWrapper.VisualStudio(VSWrapper.VisualStudionVerionEnum.VS6, logdir, curTime)
     vsclient.CleanProject(OMCBuildProject)
     vsclient.CleanProject(MeshBuildProject)
     vsclient.CleanProject(IOMCBuildProject)
@@ -169,7 +163,7 @@ if __name__ == "__main__":
                      , 'option batch abort'
                      , 'option confirm off'
                      , 'option transfer binary'
-                     , 'open ftp://ubicom:ubicom!23@{0}'.format(ftp_upload)
+                     , 'open ftp://{0}'.format(ftp_upload)
                      , 'put {0}'.format(ngf_autobuild)
                      , 'close'
                      , 'exit'

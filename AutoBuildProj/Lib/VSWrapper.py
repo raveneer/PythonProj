@@ -16,17 +16,16 @@ class VisualStudio(object):
     visualStudio = VisualStudionVerionEnum.VS6
     compilePath = 'C:\\Program Files (x86)\\Microsoft Visual Studio\\Common\\MSDev98\\Bin\\msdev.exe'
 
-    def __init__(self, vsVersion, logdir):
-        self.mylogger = logging.getLogger('ngf_auto_build_logger')
+    def __init__(self, vsVersion, logdir, curTime):
+        self.mylogger = logging.getLogger('auto_build_logger')
         self.buildlogdir = logdir
+        self.curTume = curTime
         if vsVersion == VisualStudionVerionEnum.VS2008:
             self.compilePath = 'C:\\WINDOWS\\Microsoft.NET\\Framework\\v3.5\\MSBuild.exe'
             self.visualStudio = vsVersion
             self.mylogger.info('Visual studio 2008')
         else:
             self.mylogger.info('Visual studio 6.0')
-
-
 
 
     def CleanProject(self, paramList = {}):
@@ -39,12 +38,17 @@ class VisualStudio(object):
 
 
     def BuildProject(self, paramList={}):
-        stdlog = open('{0}\\build.log'.format(self.buildlogdir), 'a')
+        stdlog = open('{0}\\build_{1}.log'.format(self.buildlogdir, self.curTume), 'a')
         self.mylogger.info('PROJECT BUILD START')
+
         if self.visualStudio == VisualStudionVerionEnum.VS6:
             keyList = paramList.keys()
             for key in keyList:
                 subprocess.run([self.compilePath, paramList[key], '/MAKE', key], stdout=stdlog)
+        else :
+            keyList = paramList.keys()
+            for key in keyList:
+                subprocess.run([self.compilePath, key, '/t:Rebuild', '/p:Configuration={0}'.format(paramList[key])], stdout=stdlog)
 
-            stdlog.close()
-            self.mylogger.info('PROJECT BUILD END')
+        stdlog.close()
+        self.mylogger.info('PROJECT BUILD END')
