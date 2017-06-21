@@ -37,18 +37,18 @@ class VisualStudio(object):
                 self.mylogger.info('PROJECT CLEAN\n{0}'.format(result.stdout.decode('utf-8')))
 
 
-    def BuildProject(self, paramList={}):
+    def BuildProject(self, projectList=[]):
+        #빌드 로그는 커서 다른 파일에 저장한다.
         stdlog = open('{0}\\build_{1}.log'.format(self.buildlogdir, self.curTume), 'a')
         self.mylogger.info('PROJECT BUILD START')
-
         if self.visualStudio == VisualStudionVerionEnum.VS6:
-            keyList = paramList.keys()
-            for key in keyList:
-                subprocess.run([self.compilePath, paramList[key], '/MAKE', key], stdout=stdlog)
+            for projectArgList in projectList:
+                args = [self.compilePath, projectArgList[0], '/MAKE', projectArgList[1]]
+                subprocess.run(args, stdout=stdlog)
         else :
-            keyList = paramList.keys()
-            for key in keyList:
-                subprocess.run([self.compilePath, key, '/t:Rebuild', '/p:Configuration={0}'.format(paramList[key])], stdout=stdlog)
+            for projectArgList in projectList:
+                args = [self.compilePath, projectArgList[0]] + projectArgList[1].split(" ")
+                subprocess.run(args, stdout=stdlog)
 
         stdlog.close()
         self.mylogger.info('PROJECT BUILD END')

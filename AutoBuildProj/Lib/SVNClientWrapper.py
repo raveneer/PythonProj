@@ -19,10 +19,10 @@ class SVNClient(object):
 
     def svnRevert(self):
         for repository in self.repositoryList:
-            result = subprocess.run([self.svnclientpath, 'cleanup', repository], stdout=subprocess.PIPE)
-            self.mylogger.info('SVN Cleanup - {0}'.format(result.stdout.decode('utf-8')))
+            self.mylogger.info('SVN CleanUp And Revert : [{0}]'.format(repository))
+            subprocess.run([self.svnclientpath, 'cleanup', repository], stdout=subprocess.PIPE)
             subprocess.call([self.svnclientpath, 'revert', '-R', repository])
-            self.mylogger.info('SVN REVERT - {0}'.format(repository))
+
 
     def svnCommit(self, commitLog):
         print("svn commit")

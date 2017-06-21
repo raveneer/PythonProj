@@ -9,7 +9,6 @@ from slackclient import SlackClient
 import shutil
 import subprocess
 import os
-import logging
 import logging.handlers
 import configparser
 
@@ -23,7 +22,7 @@ if not os.path.exists(logdir):
     os.makedirs(logdir)
 
 logger          = logging.getLogger('auto_build_logger')
-fileHandler     = logging.FileHandler('{0}/autobuild_{1}.log'.format(logdir, curTime))
+fileHandler     = logging.FileHandler('{0}/autobuild_ngf_{1}.log'.format(logdir, curTime))
 streamHandler   = logging.StreamHandler()
 
 logger.addHandler(fileHandler)
@@ -52,29 +51,36 @@ if __name__ == "__main__":
     ngf_workspaces_path = '{0}\\OpenManager\\Workspaces'.format(ngf_source_root)
     ngf_release_root = '{0}\\OpenManager\\Release'.format(ngf_source_root)
 
-    # 로컬에서 저장된 svn의 경로
-    svnRepositoryList = [ngf_source_root, ngf_installer_root]
+
+
 
     # vs6환경에서 clean하기 위한 프로젝트 파일명과 빌드 옵션을 map으로 만들어 준다.
-    OMCBuildProject = {
-        'OpenManager - Win32 R_Auth': '{0}\\MainFullVersion\\MainFullVersion.dsw'.format(ngf_workspaces_path)
-        , 'About - Win32 Release': '{0}\\ModulesCommon\\ModulesCommon.dsw'.format(ngf_workspaces_path)
-        , 'OMUpdater - Win32 Release': '{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path)}
+    OMCBuildProject = [
+          ['{0}\\MainFullVersion\\MainFullVersion.dsw'.format(ngf_workspaces_path), 'OpenManager - Win32 R_Auth']
+        , ['{0}\\ModulesCommon\\ModulesCommon.dsw'.format(ngf_workspaces_path), 'About - Win32 Release' ]
+        , ['{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path), 'OMUpdater - Win32 Release']
+    ]
 
-    MeshBuildProject = {
-        'OpenManager - Win32 R_Auth_Mesh': '{0}\\MainFullVersion\\MainFullVersion.dsw'.format(ngf_workspaces_path)
-        , 'OMUpdater - Win32 Release': '{0}\\Updater\\MeshUpdater.dsw'.format(ngf_workspaces_path)}
+    MeshBuildProject = [
+          ['{0}\\MainFullVersion\\MainFullVersion.dsw'.format(ngf_workspaces_path), 'OpenManager - Win32 R_Auth_Mesh']
+        , ['{0}\\Updater\\MeshUpdater.dsw'.format(ngf_workspaces_path), 'OMUpdater - Win32 Release']
 
-    IOMCBuildProject = {'OMUpdater - Win32 Release_IOMC': '{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path)}
+    ]
+
+    IOMCBuildProject = [
+        '{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path), 'OMUpdater - Win32 Release_IOMC'
+    ]
+
 
     # icon 복사 root
     resRoot = '{0}\\OpenManager\\MainApplication\\FullVersion\\res'.format(ngf_source_root)
 
-
+    #빌드 시간을 얻는다.
     basicfunction = BasicFunctions.BasicFunctions()
     curTime = basicfunction.getCurrentTime()
 
-    #SVN 정리
+    # 로컬에 저장된 svn 경로를 저장하고, revert 및 업데이트를 한다.
+    svnRepositoryList = [ngf_source_root, ngf_installer_root]
     svnclient = SVNClientWrapper.SVNClient( svnRepositoryList )
 
     
@@ -126,8 +132,8 @@ if __name__ == "__main__":
     ismList.append("{0}\\OpenManager 3.2.ism".format(ngf_installer_root))
     ismList.append("{0}\\CloudMesh_Lite.ism".format(ngf_installer_root))
     ismList.append("{0}\\OpenManager 3.2_IOMC.ism".format(ngf_installer_root))
-    installshield = InstallerWrapper.Installer(ismList, '3.4')
-    installshield.versioninfoUpdate()
+    installshield = InstallerWrapper.Installer('3.4')
+    installshield.versioninfoUpdate(ismList)
 
     #svn export
     svnclient.svnExport(ngf_installer_root, '{0}\\autobuild\\{1}'.format(ngf_proj_trunk, curTime))
@@ -135,7 +141,6 @@ if __name__ == "__main__":
 
 
     #installer build
-    del ismList[:]
 
     workdir = '{0}\\autobuild\\{1}'.format(ngf_proj_trunk, curTime)
     omc_arg = [workdir, 'OpenManager 3.2.ism', 'Release_AUTHORITY']
@@ -179,10 +184,16 @@ if __name__ == "__main__":
                       , 'svn'
                       , 'fetch'
                       ])
+
+    #배포 사이트 주소
+    ftp_ip = ftp_upload[ftp_upload.find('@') + 1:ftp_upload.rfind(':')]
+    ftp_path = ftp_upload[ftp_upload.find('/'):]
+    ftp_url = 'http://{0}:10003{1}/3.4.{2}'.format(ftp_ip, ftp_path, curTime)
+
     #slack noti
     logger.info('Slack notify')
     slack_client = SlackClient(config.get('slack', 'bot_token'))
-    slack_client.api_call("chat.postMessage", channel=config.get('slack', 'channel'), text='NGF Build 완료', as_user=True)
+    slack_client.api_call("chat.postMessage", channel=config.get('slack', 'channel'), text='NGF Build 완료\n{0}'.format(ftp_url), as_user=True)
 
 
     #end Main
