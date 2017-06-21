@@ -52,7 +52,7 @@ if __name__ == "__main__":
     ngf_workspaces_path = '{0}\\OpenManager\\Workspaces'.format(ngf_source_root)
     ngf_release_root = '{0}\\OpenManager\\Release'.format(ngf_source_root)
 
-    '''
+
 
     # vs6환경에서 clean하기 위한 프로젝트 파일명과 빌드 옵션을 map으로 만들어 준다.
     OMCBuildProject = [
@@ -137,10 +137,6 @@ if __name__ == "__main__":
 
     #svn export
     svnclient.svnExport(ngf_installer_root, '{0}\\autobuild\\{1}'.format(ngf_proj_trunk, curTime))
-    '''
-
-
-
 
     #installer build
     workdir = '{0}\\autobuild\\{1}'.format(ngf_proj_trunk, curTime)
@@ -161,6 +157,8 @@ if __name__ == "__main__":
     shutil.copyfile('{0}\\ReleaseInstaller\\OMCAuthority_3.4.exe'.format(workdir), '{0}\\OMCAuthority_3.4.{1}.exe'.format(ngf_autobuild, curTime))
     shutil.copyfile('{0}\\ReleaseInstaller\\CloudMeshAuthority_3.4.exe'.format(workdir), '{0}\\CloudMeshAuthority_3.4.{1}.exe'.format(ngf_autobuild, curTime))
     shutil.copyfile('{0}\\ReleaseInstaller\\IOMC_3.4.exe'.format(workdir), '{0}\\IOMC_3.4.{1}.exe'.format(ngf_autobuild, curTime))
+
+    svnclient.dumpCommitlog(ngf_proj_trunk, '{0}/autobuild_ngf_commit_dump{1}.txt'.format(logdir, curTime))
 
     logger.info('ftp upload start')
 

@@ -135,6 +135,8 @@ if __name__ == "__main__":
     shutil.copyfile('{0}\\installer\\x86\\NGFAgent\\setup.exe'.format(workdir),         '{0}\OMAgent.installer.win.intel.x86.{1}.exe'.format(agent_autobuild, curTime))
     shutil.copyfile('{0}\\installer\\x86\\swad\\setup.exe'.format(workdir),             '{0}\SWADAgent.installer.win.intel.x86.{1}.exe'.format(agent_autobuild, curTime))
 
+    svnclient.dumpCommitlog(agent_proj_trunk, '{0}/autobuild_agent_commit_dump{1}.txt'.format(logdir, curTime))
+
 
     logger.info('ftp upload start')
 

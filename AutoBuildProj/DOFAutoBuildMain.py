@@ -152,6 +152,7 @@ if __name__ == "__main__":
     shutil.copyfile('{0}\\ReleaseInstaller\\OMCBtv_5.0.exe'.format(workdir),
                     '{0}\\OMCBtv_5.0.{1}.exe'.format(dof_autobuild, curTime))
 
+    svnclient.dumpCommitlog(dof_proj_trunk, '{0}/autobuild_dof_commit_dump{1}.txt'.format(logdir, curTime))
     logger.info('ftp upload start')
 
     # win scp ftp upload
