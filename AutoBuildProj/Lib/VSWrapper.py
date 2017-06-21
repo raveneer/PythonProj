@@ -29,12 +29,14 @@ class VisualStudio(object):
 
 
     def CleanProject(self, paramList = {}):
-
         if self.visualStudio == VisualStudionVerionEnum.VS6:
-            keyList = paramList.keys()
-            for key in keyList:
-                result = subprocess.run([self.compilePath, paramList[key], '/MAKE', key, '/CLEAN'], stdout=subprocess.PIPE)
-                self.mylogger.info('PROJECT CLEAN\n{0}'.format(result.stdout.decode('utf-8')))
+            self.mylogger.info('VS6 Project Clean - START')
+            projectfile_list = []
+            for project in paramList:
+                subprocess.run([self.compilePath, project[0], '/MAKE', project[1], '/CLEAN'], stdout=subprocess.PIPE)
+                projectfile_list.append(project[0])
+            self.mylogger.info(projectfile_list)
+            self.mylogger.info('VS6 Project Clean - END')
 
 
     def BuildProject(self, projectList=[]):

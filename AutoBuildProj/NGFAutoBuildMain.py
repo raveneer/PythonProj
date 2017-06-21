@@ -16,7 +16,7 @@ basicfunction = BasicFunctions.BasicFunctions()
 curTime = basicfunction.getCurrentTime()
 
 #로그를 남길 폴더를 만들고, 스트림 핸들러와 파일 핸들러를 붙여준다.
-logdir = '{0}\\log\\{1}'.format(os.getcwd(), curTime)
+logdir = '{0}\\log'.format(os.getcwd())
 
 if not os.path.exists(logdir):
     os.makedirs(logdir)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     ]
 
     IOMCBuildProject = [
-        '{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path), 'OMUpdater - Win32 Release_IOMC'
+        ['{0}\\Updater\\OMUpdater.dsw'.format(ngf_workspaces_path), 'OMUpdater - Win32 Release_IOMC']
     ]
 
 

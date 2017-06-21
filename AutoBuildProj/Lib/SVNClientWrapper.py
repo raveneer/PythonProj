@@ -12,10 +12,10 @@ class SVNClient(object):
 
     def svnUpdate(self):
         for repository in self.repositoryList:
+            self.mylogger.info('SVN CleanUp And UPDATE : [{0}]'.format(repository))
             result = subprocess.run([self.svnclientpath, 'cleanup', repository], stdout=subprocess.PIPE)
-            self.mylogger.info('SVN Cleanup - {0}'.format(result.stdout.decode('utf-8')))
             result = subprocess.run([self.svnclientpath, 'update', repository], stdout=subprocess.PIPE)
-            self.mylogger.info('SVN UPDATE - {0}'.format(result.stdout.decode('utf-8')) )
+            self.mylogger.info('{0}'.format(result.stdout.decode('utf-8')) )
 
     def svnRevert(self):
         for repository in self.repositoryList:

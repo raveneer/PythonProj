@@ -118,7 +118,7 @@ if __name__ == "__main__":
     ismList.append(['-p', '{0}\\SWADAgent_Win2012_x64.ism'.format(workdir), '-r', 'SingleImage'])
     ismList.append(['-p', '{0}\\SWADAgent_WinNT_x64.ism'.format(workdir), '-r', 'SingleImage'])
     ismList.append(['-p', '{0}\\SWADAgent_WinNT_x86.ism'.format(workdir), '-r', 'SingleImage'])
-    installshield = InstallerWrapper.Installer(ismList, '3.0')
+    installshield = InstallerWrapper.Installer('3.0')
     installshield.buildISM(ismList)
 
 
