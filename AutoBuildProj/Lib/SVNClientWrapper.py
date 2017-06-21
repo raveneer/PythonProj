@@ -25,7 +25,9 @@ class SVNClient(object):
 
 
     def svnCommit(self, commitLog):
-        print("svn commit")
+        for repository in self.repositoryList:
+            subprocess.call([self.svnclientpath, 'commit', '-m', commitLog, repository])
+            self.mylogger.info('SVN COMMIT - [{0}]  LOG : [{1}]'.format(repository, commitLog))
 
     def svnExport(self, svnRepository, destDir):
         subprocess.call([self.svnclientpath, 'export', svnRepository, destDir, '--force'])

@@ -130,17 +130,16 @@ if __name__ == "__main__":
     svnclient.svnExport(dof_installer_root, export_path)
 
     # installer build
-    del ismList[:]
-    
-
     workdir = '{0}\\autobuild\\{1}'.format(dof_proj_trunk, curTime)
+
+    del ismList[:]
     omc_arg = [workdir, 'OpenManager 5.0_Lite.ism', 'Release_Common']
     any_arg = [workdir, 'OpenManager 5.0_Lite.ism', 'Release_BTV']
     btv_arg = [workdir, 'AnyCatcher.ism', 'Release_AnyCatcher']
 
-    ismList.append(omc_arg)
-    ismList.append(any_arg)
-    ismList.append(btv_arg)
+    ismList.append(['-p', '{0}\\OpenManager 5.0_Lite.ism'.format(workdir),      '-r', 'Release_Common',         '-c', 'COMP', '-a', 'Media'])
+    ismList.append(['-p', '{0}\\OpenManager 5.0_Lite.ism'.format(workdir),      '-r', 'Release_BTV',            '-c', 'COMP', '-a', 'Media'])
+    ismList.append(['-p', '{0}\\AnyCatcher.ism'.format(workdir),                  '-r', 'Release_AnyCatcher',   '-c', 'COMP', '-a', 'Media'])
     installshield.buildISM(ismList)
 
     if not os.path.exists(dof_autobuild):

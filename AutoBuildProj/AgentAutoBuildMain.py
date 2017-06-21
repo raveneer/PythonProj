@@ -163,7 +163,7 @@ if __name__ == "__main__":
     # 배포 사이트 주소
     ftp_ip = ftp_upload[ftp_upload.find('@') + 1:ftp_upload.rfind(':')]
     ftp_path = ftp_upload[ftp_upload.find('/'):]
-    ftp_url = 'http://{0}:10003{1}/5.0.{2}'.format(ftp_ip, ftp_path, curTime)
+    ftp_url = 'http://{0}:10003{1}/3.0.{2}'.format(ftp_ip, ftp_path, curTime)
 
     # slack noti
     logger.info('Slack notify')

@@ -37,6 +37,6 @@ class Installer(object):
 
     def buildISM(self, buildArgs):
         for argList in buildArgs:
-            subprocess.call([self.shieldPath] +argList )
+            subprocess.call([self.shieldPath] + argList )
         return
 

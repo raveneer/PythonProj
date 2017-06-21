@@ -14,6 +14,7 @@ import configparser
 
 basicfunction = BasicFunctions.BasicFunctions()
 curTime = basicfunction.getCurrentTime()
+curTime = '20170621_1320'
 
 #로그를 남길 폴더를 만들고, 스트림 핸들러와 파일 핸들러를 붙여준다.
 logdir = '{0}\\log'.format(os.getcwd())
@@ -51,8 +52,7 @@ if __name__ == "__main__":
     ngf_workspaces_path = '{0}\\OpenManager\\Workspaces'.format(ngf_source_root)
     ngf_release_root = '{0}\\OpenManager\\Release'.format(ngf_source_root)
 
-
-
+    '''
 
     # vs6환경에서 clean하기 위한 프로젝트 파일명과 빌드 옵션을 map으로 만들어 준다.
     OMCBuildProject = [
@@ -137,19 +137,21 @@ if __name__ == "__main__":
 
     #svn export
     svnclient.svnExport(ngf_installer_root, '{0}\\autobuild\\{1}'.format(ngf_proj_trunk, curTime))
+    '''
+
 
 
 
     #installer build
-
     workdir = '{0}\\autobuild\\{1}'.format(ngf_proj_trunk, curTime)
-    omc_arg = [workdir, 'OpenManager 3.2.ism', 'Release_AUTHORITY']
-    mesh_arg = [workdir, 'CloudMesh_Lite.ism', 'Release_Mesh_Authority']
-    iomc_arg = [workdir, 'OpenManager 3.2_IOMC.ism', 'IOMC_Auth']
 
-    ismList.append(omc_arg)
-    ismList.append(mesh_arg)
-    ismList.append(iomc_arg)
+    ismList = []
+    installshield = InstallerWrapper.Installer('3.4')
+
+    ismList.append(['-p', '{0}\\OpenManager 3.2.ism'.format(workdir), '-r', 'Release_AUTHORITY', '-c', 'COMP', '-a', 'Media'])
+    ismList.append(['-p', '{0}\\CloudMesh_Lite.ism'.format(workdir), '-r', 'Release_Mesh_Authority', '-c', 'COMP', '-a', 'Media'])
+    ismList.append(['-p', '{0}\\OpenManager 3.2_IOMC.ism'.format(workdir), '-r', 'IOMC_Auth', '-c', 'COMP', '-a', 'Media'])
+
     installshield.buildISM(ismList)
 
 
