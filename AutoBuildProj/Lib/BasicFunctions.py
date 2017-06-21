@@ -61,7 +61,6 @@ class BasicFunctions(object):
                         os.makedirs('{0}\\{1}'.format(patchPath, target))
                     shutil.copyfile(sFilePath, dFilePath)
                     shutil.copyfile(sFilePath, pFilePath)
-                    self.mylogger.info('from [{0}] to [{1}], [{2}]'.format(sFilePath, dFilePath, pFilePath))
 
         self.mylogger.info('COPY MODULE  FINISH')
         return

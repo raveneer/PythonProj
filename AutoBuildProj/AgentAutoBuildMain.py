@@ -84,7 +84,7 @@ if __name__ == "__main__":
         , ['{0}\\nt\\WindowUI\\NGFAgent\\NGFAgent.sln'.format(agent_proj_trunk), '/t:Rebuild /p:Configuration=Release_Swdiscovery /p:Platform=x64']
     ]
 
-    #vsclient.BuildProject(OMAgentFullBuild)
+    vsclient.BuildProject(OMAgentFullBuild)
 
     targetPathList = ['core', 'bin_swad', 'bin_common', 'bin_anycatcher']
 

@@ -40,17 +40,14 @@ class VisualStudio(object):
 
 
     def BuildProject(self, projectList=[]):
-        #빌드 로그는 커서 다른 파일에 저장한다.
-        stdlog = open('{0}\\build_{1}.log'.format(self.buildlogdir, self.curTume), 'a')
+
         self.mylogger.info('PROJECT BUILD START')
         if self.visualStudio == VisualStudionVerionEnum.VS6:
             for projectArgList in projectList:
                 args = [self.compilePath, projectArgList[0], '/MAKE', projectArgList[1]]
-                subprocess.run(args, stdout=stdlog)
+                subprocess.run(args)
         else :
             for projectArgList in projectList:
                 args = [self.compilePath, projectArgList[0]] + projectArgList[1].split(" ")
-                subprocess.run(args, stdout=stdlog)
-
-        stdlog.close()
+                subprocess.run(args)
         self.mylogger.info('PROJECT BUILD END')

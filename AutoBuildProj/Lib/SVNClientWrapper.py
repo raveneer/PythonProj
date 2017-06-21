@@ -46,10 +46,8 @@ class SVNClient(object):
 
     def getCommitLog(self, repository, revision):
         proc = subprocess.Popen(['svn', 'log', '-r', revision, repository], stdout=subprocess.PIPE)
-        headlog = str(proc.stdout.read(), 'euc-kr')
-        new_headlog = headlog.replace('-', '')
-        headrevision = new_headlog.split('\r\n')[3]
-        return headrevision
+        commitlog = str(proc.stdout.read(), 'euc-kr')
+        return commitlog
 
     def dumpCommitlog(self, repository, commitfile):
 
@@ -59,10 +57,9 @@ class SVNClient(object):
 
         while revision > 0:
             commitlog = self.getCommitLog(repository, str(revision))
-            if commitlog.find('Auto Build Commit') < 0:
-                addLog = '[{0}] : {1}\r\n'.format(revision, commitlog)
-                commitdump.write(addLog)
-            else:
+            commitdump.write(commitlog)
+
+            if commitlog.find('Auto Build Commit') >= 0:
                 break
 
             revision -= 1

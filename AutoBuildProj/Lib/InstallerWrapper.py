@@ -2,6 +2,7 @@
 
 import time
 import subprocess
+import logging
 
 
 class Installer(object):
@@ -12,6 +13,7 @@ class Installer(object):
         now = time.localtime()
         cur_time = "%02d%02d.%02d" % (now.tm_year % 1000, now.tm_mon, now.tm_mday)
         self.new_version = '{0}.{1}'.format(version, cur_time)
+        self.mylogger = logging.getLogger('auto_build_logger')
         return
 
     def versioninfoUpdate(self, ismFileList):
@@ -36,7 +38,10 @@ class Installer(object):
     
 
     def buildISM(self, buildArgs):
+        self.mylogger.info('INSTALL SHIELD BUILD - START')
         for argList in buildArgs:
             subprocess.call([self.shieldPath] + argList )
+
+        self.mylogger.info('INSTALL SHIELD BUILD - END')
         return
 
