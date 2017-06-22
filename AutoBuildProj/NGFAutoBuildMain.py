@@ -14,7 +14,7 @@ import configparser
 
 basicfunction = BasicFunctions.BasicFunctions()
 curTime = basicfunction.getCurrentTime()
-curTime = '20170621_1320'
+
 
 #로그를 남길 폴더를 만들고, 스트림 핸들러와 파일 핸들러를 붙여준다.
 logdir = '{0}\\log'.format(os.getcwd())

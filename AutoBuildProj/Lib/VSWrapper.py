@@ -40,6 +40,7 @@ class VisualStudio(object):
 
 
     def BuildProject(self, projectList=[]):
+        logfile = open('buildlog.log', 'a')
 
         self.mylogger.info('PROJECT BUILD START')
         if self.visualStudio == VisualStudionVerionEnum.VS6:
@@ -49,5 +50,6 @@ class VisualStudio(object):
         else :
             for projectArgList in projectList:
                 args = [self.compilePath, projectArgList[0]] + projectArgList[1].split(" ")
-                subprocess.run(args)
+                subprocess.run(args, stdout=logfile)
         self.mylogger.info('PROJECT BUILD END')
+        logfile.close
