@@ -31,9 +31,7 @@ if __name__ == "__main__":
 
     svnclientpath = 'svn'
 
-    repositoryList = config.get('svn_update', 'repository').split('|')
-
-    logger.info(repositoryList)
+    repositoryList = config.get('svn_update', 'repository').split('|')    
 
     if len(repositoryList) > 0:
         for repositoryToken in repositoryList:
