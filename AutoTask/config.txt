@@ -1,3 +1,3 @@
 [svn_update]
-repository = D:\Document | D:\DOF_FULL | D:\NGF_FULL | D:\OMAGENT |D:\PerformanceView
+repository = D:\DOF_FULL | D:\NGF_FULL | D:\OMAGENT |D:\PerformanceView | D:\Document
 
