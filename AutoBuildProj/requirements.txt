@@ -1,2 +1,0 @@
-slackclient==1.0.6
-pypiwin32==220
