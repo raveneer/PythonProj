@@ -1,3 +1,3 @@
 [svn_update]
-repository = D:\Document | D:\DOF_FULL | D:\NGF_FULL | D:\OMAGENT |D:\PerformanceView
+repository = D:\DOF_FULL\trunk\OpenManager 5.0 Installer | D:\DOF_FULL\trunk\OpenManager_DOF | D:\NGF_FULL\trunk\OpenManager 3.2 Installer | D:\NGF_FULL\trunk\OpenManager3.2x | D:\OMAGENT\trunk | D:\PerformanceView\trunk | D:\Document
 
