@@ -31,6 +31,15 @@ class BasicFunctions(object):
         except:
             return '0.0.0.0'
 
+    def get_version_number_3class(self, filename):
+        try:
+            info = GetFileVersionInfo(filename, "\\")
+            ms = info['FileVersionMS']
+            ls = info['FileVersionLS']
+            return '{0}.{1}.{2}'.format( HIWORD(ms), LOWORD(ms), HIWORD(ls) )
+        except:
+            return '0.0.0'
+
     #dfilepath가 존재하고, sfilepaht와 파일 버전 정보가 다른 경우 true를 리턴한다.
     def isCopyFile(self, sfilepath, dfilepath):
 
@@ -63,6 +72,25 @@ class BasicFunctions(object):
                         os.makedirs('{0}\\{1}'.format(patchPath, target))
                     shutil.copyfile(sFilePath, dFilePath)
                     shutil.copyfile(sFilePath, pFilePath)
+
+        self.mylogger.info('COPY MODULE  FINISH')
+        return
+
+    def copyUpdateModules(self, targetPathList, releasePath,  patchPath):
+        self.mylogger.info('COPY MODULE from [{0}] to [{1}]'.format(releasePath, patchPath))
+        for target in targetPathList:
+            sourceFileList = self.getfilenames('{0}\\{1}'.format(releasePath, target))
+            for fileName in sourceFileList:
+                sFilePath = '{0}\\{1}\\{2}'.format(releasePath, target, fileName)
+
+                if not os.path.exists('{0}\\{1}'.format(patchPath, target)):
+                    os.makedirs('{0}\\{1}'.format(patchPath, target))
+
+                verinfo = self.get_version_number_3class(sFilePath)
+                s = fileName.split('.')
+                pFilePath = '{0}\\{1}\\{2}-{3}.{4}'.format(patchPath, target, s[0], verinfo, s[1])
+
+                shutil.copyfile(sFilePath, pFilePath)
 
         self.mylogger.info('COPY MODULE  FINISH')
         return

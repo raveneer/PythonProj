@@ -49,7 +49,6 @@ if __name__ == "__main__":
     # trunk에서 시작하는 경로는 변경 될 수 없다.
     agent_installer_root = '{0}\\nt\\InstallShield'.format(agent_proj_trunk)
     agent_source_root = '{0}\\unix\\lib'.format(agent_proj_trunk)
-    agent_module_root = '{0}\\nt\\modules\\windows'.format(agent_proj_trunk)
     agent_release_x86_root = '{0}\\nt\\Win32\\Release'.format(agent_proj_trunk)
     agent_release_x64_root = '{0}\\nt\\x64\\Release'.format(agent_proj_trunk)
 
@@ -58,7 +57,7 @@ if __name__ == "__main__":
     curTime = basicfunction.getCurrentTime()
     
     #로컬에 저장된 svn 경로를 저장하고, revert 및 업데이트를 한다.
-    svnRepositoryList = [agent_source_root, agent_installer_root, agent_module_root]
+    svnRepositoryList = [agent_source_root, agent_installer_root]
     svnclient = SVNClientWrapper.SVNClient(svnRepositoryList)
 
     svnclient.svnRevert();
@@ -93,7 +92,7 @@ if __name__ == "__main__":
     basicfunction.copyUpdateModules(targetPathList, agent_release_x86_root, x86Install, x86patchPath)
 
     x64Install = '{0}\\SetupFiles\\x64_release'.format(agent_installer_root)
-    x64patchPath = '{0}\\patch\\AgentNT_x86'.format(agent_autobuild)
+    x64patchPath = '{0}\\patch\\AgentNT_x64'.format(agent_autobuild)
     basicfunction.copyUpdateModules(targetPathList, agent_release_x64_root, x64Install, x64patchPath)
 
 
