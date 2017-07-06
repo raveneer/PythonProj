@@ -88,7 +88,7 @@ if __name__ == "__main__":
     ####################################################
     #########일반 OMC 처리하기
 
-    #vsclient.BuildProject(OMCBuildProject)
+    vsclient.BuildProject(OMCBuildProject)
 
     targetPathList = ['bin', 'modules']
 
@@ -99,7 +99,8 @@ if __name__ == "__main__":
 
     ####################################################
     #########  anycatcher 처리하기
-    #vsclient.BuildProject(AnycatcherBuildProject)
+    
+    vsclient.BuildProject(AnycatcherBuildProject)
 
     installerPath = '{0}\\CustomSetupFile\\AnyCatcher\\Common'.format(dof_installer_root)
     patchPath = '{0}\\patch\\AnycatcherClient'.format(dof_autobuild)
@@ -108,7 +109,8 @@ if __name__ == "__main__":
 
     ####################################################
     #########  BTV 처리하기
-    #vsclient.BuildProject(BTVBuildProject)
+    
+    vsclient.BuildProject(BTVBuildProject)
 
     installerPath = '{0}\\CustomSetupFile\\BTV\\Common'.format(dof_installer_root)
     patchPath = '{0}\\patch\\BTVClient'.format(dof_autobuild)
@@ -189,4 +191,4 @@ if __name__ == "__main__":
     slack_client.api_call("chat.postMessage", channel=config.get('slack', 'channel'), text='DOF Build 완료\n{0}'.format(ftp_url), as_user=True)
 
     # end Main
-    logger.info("NGF Client Auto Build END")
+    logger.info("DOF Client Auto Build END")
