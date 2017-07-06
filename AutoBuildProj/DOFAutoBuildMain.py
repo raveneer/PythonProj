@@ -88,7 +88,7 @@ if __name__ == "__main__":
     ####################################################
     #########일반 OMC 처리하기
 
-    vsclient.BuildProject(OMCBuildProject)
+    #vsclient.BuildProject(OMCBuildProject)
 
     targetPathList = ['bin', 'modules']
 
@@ -99,20 +99,21 @@ if __name__ == "__main__":
 
     ####################################################
     #########  anycatcher 처리하기
-    vsclient.BuildProject(AnycatcherBuildProject)
+    #vsclient.BuildProject(AnycatcherBuildProject)
 
     installerPath = '{0}\\CustomSetupFile\\AnyCatcher\\Common'.format(dof_installer_root)
     patchPath = '{0}\\patch\\AnycatcherClient'.format(dof_autobuild)
 
-    basicfunction.copyUpdateModules(targetPathList, dof_release_root, installerPath, patchPath)
+    basicfunction.copyUpdateModules(targetPathList, dof_release_root + 'Anycatcher', installerPath, patchPath)
 
     ####################################################
     #########  BTV 처리하기
-    vsclient.BuildProject(BTVBuildProject)
+    #vsclient.BuildProject(BTVBuildProject)
+
     installerPath = '{0}\\CustomSetupFile\\BTV\\Common'.format(dof_installer_root)
     patchPath = '{0}\\patch\\BTVClient'.format(dof_autobuild)
 
-    basicfunction.copyUpdateModules(targetPathList, dof_release_root, installerPath, patchPath)
+    basicfunction.copyUpdateModules(targetPathList, dof_release_root + 'Btv', installerPath, patchPath)
 
     # install shield porductversion update
 

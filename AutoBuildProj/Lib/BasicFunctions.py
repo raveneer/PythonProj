@@ -15,7 +15,9 @@ class BasicFunctions(object):
 
     #주어진 경로에서 파일목록을 얻는다.
     def getfilenames(self, dirname):
-        filenames = os.listdir(dirname)
+        filenames = []
+        if os.path.exists(dirname) :
+            filenames = os.listdir(dirname)
         return  filenames
 
 
