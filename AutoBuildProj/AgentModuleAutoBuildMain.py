@@ -52,6 +52,7 @@ if __name__ == "__main__":
     agent_module_project = '{0}\\nt\\modules\\projs'.format(agent_proj_trunk)
     agent_release_x86_root = '{0}\\nt\\Win32\\Release'.format(agent_proj_trunk)
     agent_release_x64_root = '{0}\\nt\\x64\\Release'.format(agent_proj_trunk)
+    agent_installer_root = '{0}\\nt\\InstallShield'.format(agent_proj_trunk)
 
     #빌드 현재 시간을 얻는다.
     basicfunction = BasicFunctions.BasicFunctions()
@@ -81,10 +82,12 @@ if __name__ == "__main__":
     targetPathList = ['modules']
 
     x86patchPath = '{0}\\patch\\AgentNT_x86'.format(agent_autobuild)
-    basicfunction.copyUpdateModules(targetPathList, agent_release_x86_root, x86patchPath)
+    x86installerPath = '{0}\\modules\\x86_release'.format(agent_installer_root)
+    basicfunction.copyUpdateModules(targetPathList, agent_release_x86_root, x86installerPath, x86patchPath)
 
     x64patchPath = '{0}\\patch\\AgentNT_x64'.format(agent_autobuild)
-    basicfunction.copyUpdateModules(targetPathList, agent_release_x64_root, x64patchPath)
+    x64installerPath = '{0}\\modules\\x64_release'.format(agent_installer_root)
+    basicfunction.copyUpdateModules(targetPathList, agent_release_x64_root, x64installerPath, x64patchPath)
 
     logger.info('ftp upload start')
 

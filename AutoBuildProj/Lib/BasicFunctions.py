@@ -75,7 +75,7 @@ class BasicFunctions(object):
 
         self.mylogger.info('COPY MODULE  FINISH')
         return
-
+'''
     def copyUpdateModules(self, targetPathList, releasePath,  patchPath):
         self.mylogger.info('COPY MODULE from [{0}] to [{1}]'.format(releasePath, patchPath))
         for target in targetPathList:
@@ -94,3 +94,4 @@ class BasicFunctions(object):
 
         self.mylogger.info('COPY MODULE  FINISH')
         return
+'''
