@@ -126,4 +126,4 @@ if __name__ == "__main__":
 
 
     # end Main
-    logger.info("AGNET Client Auto Build END")
+    logger.info("AGNET Module Auto Build END")
