@@ -54,7 +54,8 @@ if __name__ == "__main__":
 
     #빌드 현재 시간을 얻는다.
     basicfunction = BasicFunctions.BasicFunctions()
-    curTime = basicfunction.getCurrentTime()
+    #curTime = basicfunction.getCurrentTime()
+    curTime = '20170720_1530'
     
     #로컬에 저장된 svn 경로를 저장하고, revert 및 업데이트를 한다.
     svnRepositoryList = [agent_source_root, agent_installer_root]
@@ -83,7 +84,7 @@ if __name__ == "__main__":
         , ['{0}\\nt\\WindowUI\\NGFAgent\\NGFAgent.sln'.format(agent_proj_trunk), '/t:Rebuild /p:Configuration=Release_Swdiscovery /p:Platform=x64']
     ]
 
-    vsclient.BuildProject(OMAgentFullBuild)
+    #vsclient.BuildProject(OMAgentFullBuild)
 
     targetPathList = ['core', 'bin_swad', 'bin_common', 'bin_anycatcher']
 
