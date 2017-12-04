@@ -27,7 +27,7 @@ if __name__ == "__main__":
     if os.path.exists('.\config.txt'):
         config.read('.\config.txt')
 
-    #중복되지 않는 30개의 숫자를 뽑아서 랜덤한 숫자로 섞은 다음 5개의 게임을 만들어 텍스트로 저장한다
+    #45개의 숫자 중에서 중복되지 않는 30개의 숫자로 로또 5게임을 만든다.
     lotto_numbers = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -42,11 +42,12 @@ if __name__ == "__main__":
         if lotto_numbers[random_number] == 1 :
             lotto_numbers[random_number] = 0
             lotto_single.append(random_number)
+            if len(lotto_single) == 6:
+                lotto_single.sort()
+                lotto_games.append(lotto_single)
+                lotto_single = []
 
-        if len(lotto_single) == 6 :
-            lotto_single.sort()
-            lotto_games.append(lotto_single)
-            lotto_single = []
+
 
     for lotto in lotto_games:
         print (lotto)
